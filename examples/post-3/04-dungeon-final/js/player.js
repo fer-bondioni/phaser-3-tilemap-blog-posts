@@ -30,7 +30,7 @@ export default class Player {
   update() {
     const keys = this.keys;
     const sprite = this.sprite;
-    const speed = 300;
+    const speed = 1000;
     const prevVelocity = sprite.body.velocity.clone();
 
     // Stop any previous movement from the last frame

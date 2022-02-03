@@ -23,14 +23,16 @@ const config = {
   },
 };
 
+
+
 const game = new Phaser.Game(config);
 let cursors;
 let player;
-let showDebug = false;
+//let showDebug = false;
 
 function preload() {
   this.load.image("tiles", "../assets/tilesets/tuxmon-sample-32px-extruded.png");
-  this.load.tilemapTiledJSON("map", "../assets/tilemaps/tuxemon-town.json");
+  this.load.tilemapTiledJSON("map", "../assets/tilemaps/hay-chipa.json");
 
   // An atlas is a way to pack multiple images together into one texture. I'm using it to load all
   // the player animations (walking left, walking right, etc.) in one image. For more info see:
@@ -62,6 +64,8 @@ function create() {
   // Object layers in Tiled let you embed extra info into a map - like a spawn point or custom
   // collision shapes. In the tmx file, there's an object layer with a point named "Spawn Point"
   const spawnPoint = map.findObject("Objects", (obj) => obj.name === "Spawn Point");
+  const cartel = map.findObject("Objects", (obj) => obj.name === "Cartel");
+
 
   // Create a sprite with physics enabled via the physics system. The image used for the sprite has
   // a bit of whitespace, so I'm using setSize & setOffset to control the size of the player's body.
@@ -69,6 +73,7 @@ function create() {
     .sprite(spawnPoint.x, spawnPoint.y, "atlas", "misa-front")
     .setSize(30, 40)
     .setOffset(0, 24);
+
 
   // Watch the player and worldLayer for collisions, for the duration of the scene:
   this.physics.add.collider(player, worldLayer);
@@ -129,32 +134,55 @@ function create() {
 
   // Help text that has a "fixed" position on the screen
   this.add
-    .text(16, 16, 'Arrow keys to move\nPress "D" to show hitboxes', {
+    .text(16, 16, 'Arrow keys to move\nRead the big question\nThen press E', {
       font: "18px monospace",
       fill: "#000000",
       padding: { x: 20, y: 10 },
       backgroundColor: "#ffffff",
     })
     .setScrollFactor(0)
-    .setDepth(30);
+    .setDepth(30)
 
-  // Debug graphics
-  this.input.keyboard.once("keydown-D", (event) => {
+    this.add
+    .text(100, 550, 'Run mona!', {
+      font: "18px monospace",
+      fill: "#000000",
+      padding: { x: 20, y: 10 },
+      backgroundColor: "#ffffff",
+    })
+    .setScrollFactor(1)
+    .setDepth(30)
+
+    this.add
+    .text(990, 550, '<== That way!', {
+      font: "18px monospace",
+      fill: "#000000",
+      padding: { x: 20, y: 10 },
+      backgroundColor: "#ffffff",
+    })
+    .setScrollFactor(1)
+    .setDepth(30)
+  
+  this.input.keyboard.once("keydown-E", (event) => {
     // Turn on physics debugging to show player's hitbox
-    this.physics.world.createDebugGraphic();
-
-    // Create worldLayer collision graphic above the player, but below the help text
-    const graphics = this.add.graphics().setAlpha(0.75).setDepth(20);
-    worldLayer.renderDebug(graphics, {
-      tileColor: null, // Color of non-colliding tiles
-      collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-      faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
-    });
+    this.add.text(550, 16, 'Exactly, no chipa!!', {
+      font: "18px monospace",
+      fill: "#000000",
+      padding: { x: 20, y: 10 },
+      backgroundColor: "#ffffff",
+    })
+    .setScrollFactor(0)
+    .setDepth(30)
   });
 }
 
+
+
+// const textConfig={fontSize:'20px',color:'#ff0000',fontFamily: 'Arial'};
+// this.add.text(game.config.width,game.config.height,"SomeText",textConfig);
+
 function update(time, delta) {
-  const speed = 175;
+  const speed = 500;
   const prevVelocity = player.body.velocity.clone();
 
   // Stop any previous movement from the last frame
